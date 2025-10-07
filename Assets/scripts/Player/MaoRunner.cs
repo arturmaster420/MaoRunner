@@ -1,31 +1,39 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 public class MaoRunnerFixed : MonoBehaviour
 {
     [Header("Скорости")]
-    public float forwardSpeed = 5f;          // начальная скорость
-    public float maxForwardSpeed = 30f;      // максимум
-    public float speedGainPerSecond = 0.1f;  // ускорение в сек
+    public float forwardSpeed = 10f;          // стартовая (~30 км/ч)
+    public float maxForwardSpeed = 55f;       // предел (~200 км/ч)
+    public float speedGainPerSecond = 0.15f;  // ускорение
 
     [Header("Движение по полосам")]
     public float laneDistance = 3f;
     public float laneSwitchSpeed = 15f;
 
     [Header("Прыжок и слайд")]
-    public float jumpForce = 9f;             // сила прыжка (регулируй тут)
-    public float gravity = -30f;             // гравитация (отрицательная!)
-    public float slideDuration = 1f;
+    public float jumpForce = 9f;
+    public float gravity = -35f;
+    public float slideDuration = 1.2f;
     public float slideHeight = 0.6f;
+
+    [Space]
+    [Header("Адаптация по скорости")]
+    [Tooltip("Влияние скорости на длину прыжка (0 = нет, 1 = максимум)")]
+    [Range(0f, 1f)] public float jumpLengthInfluence = 0.75f;
+
+    [Tooltip("Влияние скорости на длительность слайда (0 = нет, 1 = максимум)")]
+    [Range(0f, 1f)] public float slideLengthInfluence = 0.8f;
 
     private CharacterController controller;
     private Animator animator;
 
-    private int currentLane = 1; // 0=левая, 1=средняя, 2=правая
+    private int currentLane = 1;
     private float verticalVelocity;
     private bool isSliding = false;
     private float originalHeight;
-    private Vector3 move;
     private bool isDead = false;
 
     void Start()
@@ -42,12 +50,16 @@ public class MaoRunnerFixed : MonoBehaviour
         HandleInput();
         ApplyMovement();
 
-        // Ускорение со временем
+        // Ускорение скорости со временем
         forwardSpeed = Mathf.Min(maxForwardSpeed, forwardSpeed + speedGainPerSecond * Time.deltaTime);
 
-        // В UI (км/ч)
+        // Обновление UI скорости (в км/ч)
         if (UIManager.Instance != null)
             UIManager.Instance.UpdateSpeed(forwardSpeed);
+
+        // Ускорение всех анимаций с ростом скорости
+        if (animator != null)
+            animator.speed = 1f + (forwardSpeed / maxForwardSpeed) * 0.5f;
     }
 
     private void HandleInput()
@@ -59,12 +71,14 @@ public class MaoRunnerFixed : MonoBehaviour
         {
             animator.SetBool("isRunning", true);
 
+            // прыжок
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                verticalVelocity = jumpForce;      // задаём стартовую скорость вверх
+                verticalVelocity = jumpForce;
                 animator.SetTrigger("Jump");
             }
 
+            // слайд
             if (Input.GetKeyDown(KeyCode.LeftControl) && !isSliding)
                 StartCoroutine(Slide());
         }
@@ -72,23 +86,21 @@ public class MaoRunnerFixed : MonoBehaviour
 
     private void ApplyMovement()
     {
-        // ГРАВИТАЦИЯ — правильная версия:
+        // гравитация
         if (controller.isGrounded)
         {
-            // на земле держим небольшую отрицательную скорость,
-            // чтобы контроллер уверенно касался поверхности
-            if (verticalVelocity < 0f) verticalVelocity = -1f;
+            if (verticalVelocity < 0f)
+                verticalVelocity = -1f;
         }
         else
         {
-            // в воздухе накапливаем ускорение вниз
             verticalVelocity += gravity * Time.deltaTime;
         }
 
         // движение вперёд
-        move = Vector3.forward * forwardSpeed;
+        Vector3 move = Vector3.forward * forwardSpeed;
 
-        // смена полос (по X)
+        // смена полос
         float desiredX = (currentLane - 1) * laneDistance;
         float diffX = desiredX - transform.position.x;
         move.x = diffX * laneSwitchSpeed;
@@ -98,22 +110,36 @@ public class MaoRunnerFixed : MonoBehaviour
 
         controller.Move(move * Time.deltaTime);
 
-        // фикс от крена по Z
+        // фикс вращения
         var euler = transform.eulerAngles;
         transform.eulerAngles = new Vector3(0f, euler.y, 0f);
 
-        // необязательный бонус: уменьшать stepOffset в воздухе, чтобы прыжок был «чище»
         controller.stepOffset = controller.isGrounded ? 0.3f : 0f;
     }
 
-    private System.Collections.IEnumerator Slide()
+    private IEnumerator Slide()
     {
         isSliding = true;
         animator.SetTrigger("Slide");
 
+        // ⚡ ускорение анимации слайда при разгоне
+        float slideAnimSpeed = 1f + (forwardSpeed / maxForwardSpeed) * 0.5f;
+        animator.speed = slideAnimSpeed;
+
+        // ⏱️ длительность слайда уменьшается с ростом скорости
+        float speedFactor = forwardSpeed / maxForwardSpeed;
+        float adjustedDuration = Mathf.Lerp(slideDuration, slideDuration * 0.4f, slideLengthInfluence * speedFactor);
+
+        // ↓ уменьшаем коллайдер и опускаем pivot
         controller.height = slideHeight;
-        yield return new WaitForSeconds(slideDuration);
+        controller.center = new Vector3(0, slideHeight / 2f, 0);
+
+        yield return new WaitForSeconds(adjustedDuration);
+
+        // ↑ возвращаем параметры
         controller.height = originalHeight;
+        controller.center = new Vector3(0, originalHeight / 2f, 0);
+        animator.speed = 1f;
 
         isSliding = false;
     }
@@ -131,9 +157,11 @@ public class MaoRunnerFixed : MonoBehaviour
         isDead = true;
         forwardSpeed = 0f;
 
-        if (animator != null) animator.SetTrigger("Die");
+        if (animator != null)
+            animator.SetTrigger("Die");
 
         var gm = FindObjectOfType<GameOverManager>();
-        if (gm != null) gm.GameOver();
+        if (gm != null)
+            gm.GameOver();
     }
 }
