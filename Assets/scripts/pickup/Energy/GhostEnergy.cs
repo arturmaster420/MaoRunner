@@ -20,7 +20,7 @@ public class GhostEnergy : MonoBehaviour
 
     void Start()
     {
-        runner = GetComponent<MaoRunnerFixed>();
+         runner = GetComponent<MaoRunnerFixed>();
         controller = GetComponent<CharacterController>();
         UpdateUI();
     }

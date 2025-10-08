@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 public class MaoRunnerFixed : MonoBehaviour
 {
     [Header("Скорости")]
-    public float forwardSpeed = 10f;          // стартовая (~30 км/ч)
-    public float maxForwardSpeed = 55f;       // предел (~200 км/ч)
-    public float speedGainPerSecond = 0.15f;  // ускорение
+    public float forwardSpeed = 5f;
+    public float maxForwardSpeed = 30f;
+    public float speedGainPerSecond = 0.1f;
 
     [Header("Движение по полосам")]
     public float laneDistance = 3f;
@@ -15,26 +14,30 @@ public class MaoRunnerFixed : MonoBehaviour
 
     [Header("Прыжок и слайд")]
     public float jumpForce = 9f;
-    public float gravity = -35f;
-    public float slideDuration = 1.2f;
+    public float gravity = -30f;
+    public float slideDuration = 1f;
     public float slideHeight = 0.6f;
 
-    [Space]
     [Header("Адаптация по скорости")]
-    [Tooltip("Влияние скорости на длину прыжка (0 = нет, 1 = максимум)")]
-    [Range(0f, 1f)] public float jumpLengthInfluence = 0.75f;
-
-    [Tooltip("Влияние скорости на длительность слайда (0 = нет, 1 = максимум)")]
-    [Range(0f, 1f)] public float slideLengthInfluence = 0.8f;
+    public float jumpLengthInfluence = 1f;
+    public float slideLengthInfluence = 1f;
+    public float minAnimSpeed = 0.85f;
+    public float maxAnimSpeed = 1.35f;
+    public float baseSpeedKmh = 30f;   // базовая "референсная" скорость
+    public float maxSpeedKmh = 200f;  // верхняя граница для нормализации
 
     private CharacterController controller;
     private Animator animator;
 
-    private int currentLane = 1;
+    private int currentLane = 1;   // 0 left, 1 middle, 2 right
     private float verticalVelocity;
     private bool isSliding = false;
     private float originalHeight;
+    private Vector3 move;
+
     private bool isDead = false;
+    private bool invulnerable = false;
+    private float lastAliveSpeed = 0f;
 
     void Start()
     {
@@ -47,19 +50,34 @@ public class MaoRunnerFixed : MonoBehaviour
     {
         if (isDead) return;
 
+        // запоминаем "живую" скорость (нужна для Revive)
+        lastAliveSpeed = forwardSpeed;
+
         HandleInput();
         ApplyMovement();
 
-        // Ускорение скорости со временем
+        // Ускорение со временем
         forwardSpeed = Mathf.Min(maxForwardSpeed, forwardSpeed + speedGainPerSecond * Time.deltaTime);
 
-        // Обновление UI скорости (в км/ч)
+        // Обновление UI (км/ч)
         if (UIManager.Instance != null)
             UIManager.Instance.UpdateSpeed(forwardSpeed);
 
-        // Ускорение всех анимаций с ростом скорости
-        if (animator != null)
-            animator.speed = 1f + (forwardSpeed / maxForwardSpeed) * 0.5f;
+        // Адаптация скорости анимаций
+        UpdateAnimSpeedByForward();
+    }
+
+    private void UpdateAnimSpeedByForward()
+    {
+        if (animator == null) return;
+
+        float kmh = forwardSpeed * 3.6f;
+        float t = Mathf.InverseLerp(baseSpeedKmh, maxSpeedKmh, kmh);
+        float animMul = Mathf.Lerp(minAnimSpeed, maxAnimSpeed, t);
+
+        animator.SetFloat("RunSpeed", animMul);
+        animator.SetFloat("JumpSpeed", animMul);
+        animator.SetFloat("SlideSpeed", animMul);
     }
 
     private void HandleInput()
@@ -69,16 +87,14 @@ public class MaoRunnerFixed : MonoBehaviour
 
         if (controller.isGrounded)
         {
-            animator.SetBool("isRunning", true);
+            if (animator) animator.SetBool("isRunning", true);
 
-            // прыжок
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 verticalVelocity = jumpForce;
-                animator.SetTrigger("Jump");
+                if (animator) animator.SetTrigger("Jump");
             }
 
-            // слайд
             if (Input.GetKeyDown(KeyCode.LeftControl) && !isSliding)
                 StartCoroutine(Slide());
         }
@@ -89,8 +105,7 @@ public class MaoRunnerFixed : MonoBehaviour
         // гравитация
         if (controller.isGrounded)
         {
-            if (verticalVelocity < 0f)
-                verticalVelocity = -1f;
+            if (verticalVelocity < 0f) verticalVelocity = -1f;
         }
         else
         {
@@ -98,9 +113,9 @@ public class MaoRunnerFixed : MonoBehaviour
         }
 
         // движение вперёд
-        Vector3 move = Vector3.forward * forwardSpeed;
+        move = Vector3.forward * forwardSpeed;
 
-        // смена полос
+        // смена полос (X)
         float desiredX = (currentLane - 1) * laneDistance;
         float diffX = desiredX - transform.position.x;
         move.x = diffX * laneSwitchSpeed;
@@ -110,43 +125,35 @@ public class MaoRunnerFixed : MonoBehaviour
 
         controller.Move(move * Time.deltaTime);
 
-        // фикс вращения
+        // фикс крена
         var euler = transform.eulerAngles;
         transform.eulerAngles = new Vector3(0f, euler.y, 0f);
 
+        // stepOffset в воздухе
         controller.stepOffset = controller.isGrounded ? 0.3f : 0f;
     }
 
-    private IEnumerator Slide()
+    private System.Collections.IEnumerator Slide()
     {
         isSliding = true;
-        animator.SetTrigger("Slide");
+        if (animator) animator.SetTrigger("Slide");
 
-        // ⚡ ускорение анимации слайда при разгоне
-        float slideAnimSpeed = 1f + (forwardSpeed / maxForwardSpeed) * 0.5f;
-        animator.speed = slideAnimSpeed;
-
-        // ⏱️ длительность слайда уменьшается с ростом скорости
-        float speedFactor = forwardSpeed / maxForwardSpeed;
-        float adjustedDuration = Mathf.Lerp(slideDuration, slideDuration * 0.4f, slideLengthInfluence * speedFactor);
-
-        // ↓ уменьшаем коллайдер и опускаем pivot
         controller.height = slideHeight;
-        controller.center = new Vector3(0, slideHeight / 2f, 0);
 
-        yield return new WaitForSeconds(adjustedDuration);
+        // длину слайда регулирует slideDuration; при желании масштабируй по скорости:
+        float kmh = forwardSpeed * 3.6f;
+        float t = Mathf.InverseLerp(baseSpeedKmh, maxSpeedKmh, kmh);
+        float dur = slideDuration * Mathf.Lerp(1f, slideLengthInfluence, t);
 
-        // ↑ возвращаем параметры
+        yield return new WaitForSeconds(dur);
+
         controller.height = originalHeight;
-        controller.center = new Vector3(0, originalHeight / 2f, 0);
-        animator.speed = 1f;
-
         isSliding = false;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (isDead) return;
+        if (isDead || invulnerable) return;
 
         if (hit.gameObject.CompareTag("Obstacle") || hit.gameObject.CompareTag("Enemy"))
             Die();
@@ -154,14 +161,58 @@ public class MaoRunnerFixed : MonoBehaviour
 
     private void Die()
     {
+        if (isDead) return;
         isDead = true;
-        forwardSpeed = 0f;
 
-        if (animator != null)
-            animator.SetTrigger("Die");
+        forwardSpeed = 0f;
+        if (animator) animator.SetTrigger("Die");
 
         var gm = FindObjectOfType<GameOverManager>();
-        if (gm != null)
-            gm.GameOver();
+        if (gm != null) gm.GameOver();
+    }
+
+    /// <summary>
+    /// Возрождение: поднимаем скорость, даём неуязвимость, сдвигаем вперёд и выравниваем по полосе.
+    /// </summary>
+    public void Revive(float reviveSpeedFactor, float minReviveSpeed, float invulnSeconds, float forwardOffset)
+    {
+        // небольшой безопасный сдвиг вперёд и выравнивание по центру полосы
+        var pos = transform.position;
+        float desiredX = (currentLane - 1) * laneDistance;
+
+        // чтобы корректно "телепортнуть" CharacterController — временно выключим его
+        controller.enabled = false;
+        transform.position = new Vector3(desiredX, pos.y, pos.z + forwardOffset);
+        controller.enabled = true;
+
+        // восстановим движение
+        isDead = false;
+        verticalVelocity = -1f;
+
+        float revived = Mathf.Max(minReviveSpeed, lastAliveSpeed * reviveSpeedFactor);
+        forwardSpeed = Mathf.Min(revived, maxForwardSpeed);
+
+        if (animator)
+        {
+            animator.ResetTrigger("Die");
+            animator.SetBool("isRunning", true);
+            animator.Play("Run"); // сразу в бег
+        }
+
+        // краткая неуязвимость
+        StopAllCoroutines();
+        StartCoroutine(Invulnerability(invulnSeconds));
+    }
+
+    private System.Collections.IEnumerator Invulnerability(float time)
+    {
+        invulnerable = true;
+        float timer = time;
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+        invulnerable = false;
     }
 }
