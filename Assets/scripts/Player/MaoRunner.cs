@@ -25,6 +25,8 @@ public class MaoRunnerFixed : MonoBehaviour
     public float maxAnimSpeed = 1.35f;
     public float baseSpeedKmh = 30f;   // базовая "референсная" скорость
     public float maxSpeedKmh = 200f;  // верхняя граница для нормализации
+    public float ForwardSpeedKph => forwardSpeed * 3.6f;
+
 
     private CharacterController controller;
     private Animator animator;
@@ -65,6 +67,15 @@ public class MaoRunnerFixed : MonoBehaviour
 
         // Адаптация скорости анимаций
         UpdateAnimSpeedByForward();
+        // 🔹 Ускоряем анимации в зависимости от forwardSpeed
+        if (animator != null)
+        {
+            float speedRatio = Mathf.Clamp01(forwardSpeed / maxForwardSpeed);
+
+            animator.SetFloat("RunSpeed", Mathf.Lerp(1f, 3f, speedRatio));
+            animator.SetFloat("JumpSpeed", Mathf.Lerp(1f, 2.5f, speedRatio));
+            animator.SetFloat("SlideSpeed", Mathf.Lerp(1f, 2f, speedRatio));
+        }
     }
 
     private void UpdateAnimSpeedByForward()

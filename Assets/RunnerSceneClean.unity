@@ -1420,7 +1420,7 @@ RectTransform:
   - {fileID: 1481839690}
   - {fileID: 1897319063}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1458,8 +1458,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shurikenPrefab: {fileID: 68812117756935382, guid: 9543e715aa7d6c94598f6ab9a76a5204, type: 3}
   throwPoint: {fileID: 1122341484}
-  baseThrowSpeed: 30
-  speedMultiplier: 5
+  baseThrowSpeed: 40
+  speedMultiplier: 7
   maoRunner: {fileID: 755007949}
 --- !u!114 &755007949
 MonoBehaviour:
@@ -1474,19 +1474,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forwardSpeed: 9
-  maxForwardSpeed: 55
-  speedGainPerSecond: 0.2
+  maxForwardSpeed: 70.8
+  speedGainPerSecond: 0.3
   laneDistance: 3
-  laneSwitchSpeed: 20
-  jumpForce: 10
+  laneSwitchSpeed: 15
+  jumpForce: 9.5
   gravity: -50
-  slideDuration: 0.7
+  slideDuration: 0.6
   slideHeight: 0.3
-  jumpLengthInfluence: -1.07
-  slideLengthInfluence: -1.13
-  minAnimSpeed: 10.67
-  maxAnimSpeed: 8.43
-  baseSpeedKmh: 40
+  jumpLengthInfluence: 1
+  slideLengthInfluence: 1
+  minAnimSpeed: 1
+  maxAnimSpeed: 10
+  baseSpeedKmh: 30
   maxSpeedKmh: 360
 --- !u!143 &755007950
 CharacterController:
@@ -1533,10 +1533,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBar: {fileID: 407206901}
   energyText: {fileID: 1984542235}
-  maxEnergy: 200
-  currentEnergy: 0
-  ghostDuration: 5
-  ghostSpeedMultiplier: 1.8
+  maxEnergy: 100
+  currentEnergy: 1
+  ghostDuration: 0.7
+  ghostSpeedMultiplier: 3
 --- !u!1001 &817966462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1671,7 +1671,7 @@ MonoBehaviour:
   player: {fileID: 755007949}
   energy: {fileID: 755007954}
   maxContinues: 100
-  energyRestorePct: 100
+  energyRestorePct: 50
   reviveSpeedFactor: 0.99
   minReviveSpeed: 12
   invulnerabilityTime: 2
@@ -1952,7 +1952,7 @@ RectTransform:
   m_Children:
   - {fileID: 407206899}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2378,7 +2378,7 @@ RectTransform:
   - {fileID: 206886994}
   - {fileID: 1605175819}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2957,7 +2957,7 @@ RectTransform:
   - {fileID: 1362929330}
   - {fileID: 980861719}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3191,55 +3191,119 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorPrefab: {fileID: 743138032001578000, guid: cb6794248874de641a491de4c71ea0ca, type: 3}
-  numberOfSegments: 14
-  segmentLength: 10
+  numberOfSegments: 10
+  baseSegmentLength: 18
   player: {fileID: 755007952}
-  baseSafeZone: 14
-  baseSpawnBuffer: 14
-  obstaclePrefabs:
-  - key: Obstacle
-    prefab: {fileID: 7400015632713865583, guid: 7997f901dc31b474187d66aa4a67ecb5, type: 3}
-    chance: 0.5033708
-  - key: Obstacle
-    prefab: {fileID: 2920380569118566074, guid: 11a74a3c72d2a384c83b762a71949166, type: 3}
-    chance: 0.50947356
-  minZOffset: 2
-  maxZOffset: 8
+  safeZone: 50
+  laneCount: 3
   laneDistance: 3
-  coinPrefabs:
-  - key: Coin
-    prefab: {fileID: 53747488414540171, guid: 006789cad1d592e43bab815f18f9acfe, type: 3}
-    value: 1
-    chance: 0.10431296
-  - key: Coin
-    prefab: {fileID: 103289234326207644, guid: 37f80793d8a46014db808dc6803a4226, type: 3}
-    value: 10
-    chance: 0.052473996
-  - key: Coin
-    prefab: {fileID: 1192612023561935251, guid: db267e140cb30444993fb04b3f8ad676, type: 3}
-    value: 100
-    chance: 0.009432085
-  - key: Shuriken
-    prefab: {fileID: 5930711535294282997, guid: f5de3a9d752a48a49846da031673d444, type: 3}
-    value: 1
-    chance: 0.21365741
-  coinHeight: 0.2
-  energyPrefabs:
-  - key: EnergySpere
-    prefab: {fileID: 1550569260085099549, guid: ab8edc63d55f65d4d94c72816d931d51, type: 3}
-    value: 1
-    chance: 0.224
-  energyHeight: 0.2
-  enemyPrefabs:
-  - key: Enemy
-    prefab: {fileID: 7015516004217321912, guid: e3322cbc3a0708642bf6aef1dadcb9dd, type: 3}
-    chance: 0.051660948
-  - key: Enemy
-    prefab: {fileID: 1723136665104521108, guid: ed3214a747eed1f4785d7f37569bc7c6, type: 3}
-    chance: 0.052645523
-  specialEnemies: []
-  densityReductionFactor: 1
-  minDensityMultiplier: 0.3080048
+  baseSlotsPerSegment: 1
+  slotScaleBySpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 3.474998
+      value: 5.813681
+      inSlope: 0.33333334
+      outSlope: 0.33333334
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  baseDensity: 0.42
+  densityBySpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 4.0083313
+      value: 0.4971649
+      inSlope: -0.1
+      outSlope: -0.1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minLowGap: 2
+  minHighGap: 2
+  minCrossGap: 1
+  bonusSegments: 10
+  bonusChanceAtHighSpeed: 0
+  bonusSpeedThresholdKph: 100.2
+  pickupsOnlyInBonus: 0
+  waves:
+  - minSpeedKph: 150
+    densityMultiplier: 5.08
+    bonusChanceMultiplier: -0.72
+    slotScaleMultiplier: -3
+    overrideLowKeys: []
+    overrideHighKeys: []
+    overrideEnemyKeys: []
+    overridePickupKeys:
+    - key: coin100
+      weight: 10
+    - key: energy
+      weight: 10
+    - key: coin10
+      weight: 15
+    - key: shuriken
+      weight: 15
+    overrideBossKeys:
+    - key: boss
+      weight: 10
+  lowObstacleKeys:
+  - key: low
+    weight: 40
+  highObstacleKeys:
+  - key: high
+    weight: 40
+  enemyKeys:
+  - key: enemy
+    weight: 0.01
+  pickupKeys:
+  - key: coin1
+    weight: 10
+  - key: coin10
+    weight: 6
+  - key: coin100
+    weight: 1
+  - key: shuriken
+    weight: 6
+  - key: energy
+    weight: 6
+  bossKeys:
+  - key: boss
+    weight: 0.01
+  pickupWeightMult: 0.5
+  obstacleWeightMult: 2
+  enemyWeightMult: 0.5
+  bossWeightMult: 0.3
+  runner: {fileID: 755007949}
+  estimatedJumpTime: 0.3
+  pickupHeight: 0.3
 --- !u!4 &1942378457
 Transform:
   m_ObjectHideFlags: 0
@@ -3248,8 +3312,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1942378455}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.29969168, y: -0.74079037, z: -1.9867477}
-  m_LocalScale: {x: 1, y: 1, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 18}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3390,3 +3454,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984542233}
   m_CullTransparentMesh: 1
+--- !u!1 &2074448379
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2074448381}
+  - component: {fileID: 2074448380}
+  m_Layer: 0
+  m_Name: PoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2074448380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074448379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281171a7ecd49414ab0dde1f6a26fe1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - key: low
+    prefab: {fileID: 2920380569118566074, guid: 11a74a3c72d2a384c83b762a71949166, type: 3}
+    preload: 8
+  - key: high
+    prefab: {fileID: 7400015632713865583, guid: 7997f901dc31b474187d66aa4a67ecb5, type: 3}
+    preload: 8
+  - key: enemy
+    prefab: {fileID: 7015516004217321912, guid: e3322cbc3a0708642bf6aef1dadcb9dd, type: 3}
+    preload: 8
+  - key: boss
+    prefab: {fileID: 1723136665104521108, guid: ed3214a747eed1f4785d7f37569bc7c6, type: 3}
+    preload: 8
+  - key: coin1
+    prefab: {fileID: 53747488414540171, guid: 006789cad1d592e43bab815f18f9acfe, type: 3}
+    preload: 8
+  - key: coin10
+    prefab: {fileID: 103289234326207644, guid: 37f80793d8a46014db808dc6803a4226, type: 3}
+    preload: 8
+  - key: coin100
+    prefab: {fileID: 1192612023561935251, guid: db267e140cb30444993fb04b3f8ad676, type: 3}
+    preload: 8
+  - key: energy
+    prefab: {fileID: 1550569260085099549, guid: ab8edc63d55f65d4d94c72816d931d51, type: 3}
+    preload: 8
+  - key: shuriken
+    prefab: {fileID: 5930711535294282997, guid: f5de3a9d752a48a49846da031673d444, type: 3}
+    preload: 8
+--- !u!4 &2074448381
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074448379}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.713672, y: 0.10297486, z: -1.4780457}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
