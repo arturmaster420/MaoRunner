@@ -1,17 +1,29 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PooledAutoDespawn : MonoBehaviour
+public class PoolAutoDespawn : MonoBehaviour
 {
+    public string poolKey; // 👈 добавляем, чтобы знать к какому пулу относится объект
     public float lifeTime = 5f;
-    float _t;
 
-    void OnEnable() => _t = 0f;
-
-    void Update()
+    private void OnEnable()
     {
-        _t += Time.deltaTime;
-        if (_t >= lifeTime) PoolManager.Instance.Despawn(gameObject);
+        CancelInvoke();
+        Invoke(nameof(DespawnSelf), lifeTime);
     }
 
-    void OnDisable() => _t = 0f;
+    private void DespawnSelf()
+    {
+        if (PoolManager.Instance != null)
+        {
+            // если ключ задан — возвращаем в пул
+            if (!string.IsNullOrEmpty(poolKey))
+                PoolManager.Instance.Despawn(poolKey, gameObject);
+            else
+                gameObject.SetActive(false); // fallback
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 }

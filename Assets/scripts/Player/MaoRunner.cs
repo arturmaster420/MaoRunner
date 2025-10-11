@@ -185,6 +185,14 @@ public class MaoRunnerFixed : MonoBehaviour
     /// <summary>
     /// Возрождение: поднимаем скорость, даём неуязвимость, сдвигаем вперёд и выравниваем по полосе.
     /// </summary>
+
+    /// <summary>
+    /// Текущая скорость в км/ч для внешних систем (спавнер, UI и т.п.).
+    /// Ничего не ломает: просто читаем forwardSpeed и переводим в km/h.
+    /// </summary>
+    public float CurrentSpeedKph => forwardSpeed * 3.6f;
+
+
     public void Revive(float reviveSpeedFactor, float minReviveSpeed, float invulnSeconds, float forwardOffset)
     {
         // небольшой безопасный сдвиг вперёд и выравнивание по центру полосы

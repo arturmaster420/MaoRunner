@@ -1678,7 +1678,7 @@ MonoBehaviour:
   energyRestorePct: 50
   reviveSpeedFactor: 1
   minReviveSpeed: 12
-  invulnerabilityTime: 2
+  invulnerabilityTime: 10
   reviveForwardOffset: 3
 --- !u!114 &971520353
 MonoBehaviour:
@@ -3202,48 +3202,25 @@ MonoBehaviour:
   laneCount: 3
   laneDistance: 3
   baseSlotsPerSegment: 1
-  slotScaleBySpeed:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 9.045735
-      value: 6.64249
-      inSlope: 0.26794747
-      outSlope: 0.26794747
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.21698658
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  baseDensity: 0.201
+  slotScaleBySpeed: 0.001
+  baseDensity: 0.5
   densityBySpeed:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.05493164
-      value: 1.0162354
-      inSlope: -0.2186223
-      outSlope: -0.2186223
+      time: 0.040161133
+      value: 0.809391
+      inSlope: -0.23490238
+      outSlope: -0.23490238
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 2.257843
-      value: 0.5346298
-      inSlope: -0.2186223
-      outSlope: -0.2186223
+      time: 2.2088535
+      value: 0.29996002
+      inSlope: -0.23490238
+      outSlope: -0.23490238
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -3251,138 +3228,139 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minLowGap: 2
-  minHighGap: 2
-  minCrossGap: 1
-  bonusSegments: 15
-  bonusChanceAtHighSpeed: 0.007
+  minHighGap: 4
+  minCrossGap: 4
+  bonusSegments: 30
+  bonusChanceAtHighSpeed: 0.199
   bonusSpeedThresholdKph: 120
   pickupsOnlyInBonus: 1
   waves: []
   lowObstacleRules:
   - key: low
     category: ObstacleLow
-    weight: 40
+    weight: 25
     incompatibleCategories:
     - ObstacleHigh
-    - energy
-    - shuriken
-    - coin
     - Enemy
     - Boss
-    requiresCategories: []
+    - PickupCoin
+    - PickupEnergy
+    - PickupWeapon
+    requiredCategories: []
     dependencyRadius: 3
-    minSpeed: 0
+    minSpeed: 35
     maxSpeed: 999
     onlyInBonus: 0
-    onlyOutsideBonus: 0
-    minDistanceBetweenSame: 2
+    onlyOutsideBonus: 1
+    minDistanceBetweenSame: 12
   highObstacleRules:
   - key: high
     category: ObstacleHigh
-    weight: 40
+    weight: 25
     incompatibleCategories:
     - ObstacleLow
     - Enemy
     - Boss
-    requiresCategories: []
+    requiredCategories: []
     dependencyRadius: 3
-    minSpeed: 0
+    minSpeed: 35
     maxSpeed: 999
     onlyInBonus: 0
-    onlyOutsideBonus: 0
-    minDistanceBetweenSame: 2
+    onlyOutsideBonus: 1
+    minDistanceBetweenSame: 12
   enemyRules:
   - key: enemy
     category: Enemy
-    weight: 5
+    weight: 2
     incompatibleCategories:
     - ObstacleLow
     - ObstacleHigh
-    requiresCategories: []
+    - Boss
+    - PickupCoin
+    - PickupEnergy
+    - PickupWeapon
+    requiredCategories: []
     dependencyRadius: 0
     minSpeed: 100
     maxSpeed: 999
     onlyInBonus: 0
-    onlyOutsideBonus: 0
+    onlyOutsideBonus: 1
     minDistanceBetweenSame: 20
   pickupRules:
   - key: coin1
-    category: coin
-    weight: 30
+    category: PickupCoin
+    weight: 25
     incompatibleCategories:
     - Enemy
-    - ObstacleLow
     - Boss
-    - energy
-    - shuriken
-    requiresCategories: []
-    dependencyRadius: 3
+    - ObstacleLow
+    - PickupEnergy
+    - PickupWeapon
+    requiredCategories: []
+    dependencyRadius: 1
     minSpeed: 0
     maxSpeed: 999
     onlyInBonus: 0
     onlyOutsideBonus: 0
     minDistanceBetweenSame: 1
   - key: coin10
-    category: coin
-    weight: 20
+    category: PickupCoin
+    weight: 15
     incompatibleCategories:
-    - ObstacleLow
     - Enemy
     - Boss
-    - energy
-    - shuriken
-    requiresCategories: []
-    dependencyRadius: 3
+    - ObstacleLow
+    - PickupEnergy
+    - PickupWeapon
+    requiredCategories: []
+    dependencyRadius: 1
     minSpeed: 0
-    maxSpeed: 0
+    maxSpeed: 999
     onlyInBonus: 0
     onlyOutsideBonus: 0
     minDistanceBetweenSame: 0
   - key: coin100
-    category: coin
+    category: PickupCoin
     weight: 1
     incompatibleCategories:
-    - ObstacleLow
     - Enemy
     - Boss
-    - energy
-    - shuriken
-    requiresCategories: []
-    dependencyRadius: 3
+    - ObstacleLow
+    requiredCategories: []
+    dependencyRadius: 1
     minSpeed: 0
-    maxSpeed: 0
-    onlyInBonus: 0
+    maxSpeed: 999
+    onlyInBonus: 1
     onlyOutsideBonus: 0
     minDistanceBetweenSame: 0
   - key: energy
-    category: energy
-    weight: 20
+    category: PickupEnergy
+    weight: 10
     incompatibleCategories:
-    - ObstacleLow
     - Enemy
     - Boss
-    - shuriken
-    - coin
-    requiresCategories: []
-    dependencyRadius: 3
+    - ObstacleLow
+    - PickupWeapon
+    - PickupCoin
+    requiredCategories: []
+    dependencyRadius: 1
     minSpeed: 0
     maxSpeed: 999
     onlyInBonus: 0
     onlyOutsideBonus: 0
     minDistanceBetweenSame: 1
   - key: shuriken
-    category: shuriken
-    weight: 15
+    category: PickupWeapon
+    weight: 3
     incompatibleCategories:
-    - ObstacleLow
     - Enemy
     - Boss
-    - energy
-    - coin
-    requiresCategories: []
-    dependencyRadius: 3
-    minSpeed: 0
+    - ObstacleLow
+    - PickupEnergy
+    - PickupCoin
+    requiredCategories: []
+    dependencyRadius: 1
+    minSpeed: 80
     maxSpeed: 999
     onlyInBonus: 0
     onlyOutsideBonus: 0
@@ -3392,25 +3370,28 @@ MonoBehaviour:
     category: Boss
     weight: 1
     incompatibleCategories:
+    - Enemy
     - ObstacleLow
     - ObstacleHigh
-    - Enemy
-    - Pickup
-    requiresCategories: []
+    - PickupCoin
+    - PickupEnergy
+    - PickupWeapon
+    requiredCategories: []
     dependencyRadius: 10
     minSpeed: 150
-    maxSpeed: 0
+    maxSpeed: 999
     onlyInBonus: 0
-    onlyOutsideBonus: 0
+    onlyOutsideBonus: 1
     minDistanceBetweenSame: 100
-  pickupWeightMult: 0.5
+  pickupWeightMult: 1.2
   obstacleWeightMult: 1
   enemyWeightMult: 1
   bossWeightMult: 1
-  runner: {fileID: 755007949}
+  runner: {fileID: 755007952}
   estimatedJumpTime: 0.3
   pickupHeight: 0.3
-  debugSpawnChecks: 0
+  debugSpawnChecks: 1
+  showSlotGizmos: 1
 --- !u!4 &1942378457
 Transform:
   m_ObjectHideFlags: 0
@@ -3594,30 +3575,39 @@ MonoBehaviour:
   - key: low
     prefab: {fileID: 2920380569118566074, guid: 11a74a3c72d2a384c83b762a71949166, type: 3}
     preload: 16
+    category: ObstacleLow
   - key: high
     prefab: {fileID: 7400015632713865583, guid: 7997f901dc31b474187d66aa4a67ecb5, type: 3}
     preload: 16
+    category: ObstacleHigh
   - key: enemy
     prefab: {fileID: 7015516004217321912, guid: e3322cbc3a0708642bf6aef1dadcb9dd, type: 3}
     preload: 4
+    category: Enemy
   - key: boss
     prefab: {fileID: 1723136665104521108, guid: ed3214a747eed1f4785d7f37569bc7c6, type: 3}
     preload: 4
+    category: Boss
   - key: coin1
     prefab: {fileID: 53747488414540171, guid: 006789cad1d592e43bab815f18f9acfe, type: 3}
     preload: 8
+    category: PickupCoin
   - key: coin10
     prefab: {fileID: 103289234326207644, guid: 37f80793d8a46014db808dc6803a4226, type: 3}
     preload: 12
+    category: PickupCoin
   - key: coin100
     prefab: {fileID: 1192612023561935251, guid: db267e140cb30444993fb04b3f8ad676, type: 3}
-    preload: 12
+    preload: 4
+    category: PickupCoin
   - key: energy
     prefab: {fileID: 1550569260085099549, guid: ab8edc63d55f65d4d94c72816d931d51, type: 3}
     preload: 12
+    category: PickupEnergy
   - key: shuriken
     prefab: {fileID: 5930711535294282997, guid: f5de3a9d752a48a49846da031673d444, type: 3}
     preload: 12
+    category: PickupWeapon
 --- !u!4 &2074448381
 Transform:
   m_ObjectHideFlags: 0

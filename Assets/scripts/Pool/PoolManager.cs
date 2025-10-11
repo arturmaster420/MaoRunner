@@ -3,69 +3,90 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
+    public static PoolManager Instance { get; private set; }
+
     [System.Serializable]
     public class Pool
     {
         public string key;
         public GameObject prefab;
         public int preload = 8;
+
+        [Header("Optional Category (used by TrackSpawner)")]
+        public string category = "Misc";
+
+        [HideInInspector] public Queue<GameObject> objects = new();
     }
 
-    public static PoolManager Instance { get; private set; }
+    [SerializeField] public List<Pool> pools = new();
 
-    [Header("Pools")]
-    public List<Pool> pools = new();
-
-    private readonly Dictionary<string, Queue<GameObject>> _bank = new();
-    private readonly Dictionary<GameObject, string> _reverse = new();
-
-    void Awake()
+    private void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
+        InitializePools();
+    }
 
-        foreach (var p in pools)
+    private void InitializePools()
+    {
+        foreach (var pool in pools)
         {
-            var q = new Queue<GameObject>();
-            for (int i = 0; i < p.preload; i++)
+            if (pool.prefab == null)
             {
-                var go = Instantiate(p.prefab);
-                go.SetActive(false);
-                q.Enqueue(go);
-                _reverse[go] = p.key;
+                Debug.LogWarning($"Pool '{pool.key}' has no prefab assigned.");
+                continue;
             }
-            _bank[p.key] = q;
+
+            for (int i = 0; i < pool.preload; i++)
+            {
+                GameObject obj = Instantiate(pool.prefab);
+                obj.SetActive(false);
+                pool.objects.Enqueue(obj);
+            }
         }
     }
 
-    public GameObject Spawn(string key, Vector3 pos, Quaternion rot, Transform parent = null)
+    public GameObject Spawn(string key, Vector3 position, Quaternion rotation, Transform parent = null)
     {
-        if (!_bank.TryGetValue(key, out var q) || q.Count == 0)
+        Pool pool = pools.Find(p => p.key == key);
+        if (pool == null)
         {
-            // ленивое расширение
-            var pool = pools.Find(x => x.key == key);
-            if (pool == null) return null;
-            var extra = Instantiate(pool.prefab);
-            _reverse[extra] = key;
-            extra.transform.SetPositionAndRotation(pos, rot);
-            if (parent) extra.transform.SetParent(parent, true);
-            extra.SetActive(true);
-            return extra;
+            Debug.LogWarning($"Pool with key '{key}' not found.");
+            return null;
         }
 
-        var go = q.Dequeue();
-        if (parent) go.transform.SetParent(parent, true);
-        go.transform.SetPositionAndRotation(pos, rot);
-        go.SetActive(true);
-        return go;
+        GameObject obj;
+        if (pool.objects.Count > 0)
+        {
+            obj = pool.objects.Dequeue();
+        }
+        else
+        {
+            obj = Instantiate(pool.prefab);
+        }
+
+        obj.transform.SetParent(parent);
+        obj.transform.SetPositionAndRotation(position, rotation);
+        obj.SetActive(true);
+        return obj;
     }
 
-    public void Despawn(GameObject go)
+    public void Despawn(string key, GameObject obj)
     {
-        if (go == null) return;
-        if (!_reverse.TryGetValue(go, out var key)) { Destroy(go); return; }
-        go.SetActive(false);
-        go.transform.SetParent(transform, true);
-        _bank[key].Enqueue(go);
+        Pool pool = pools.Find(p => p.key == key);
+        if (pool == null)
+        {
+            Debug.LogWarning($"Pool with key '{key}' not found.");
+            Destroy(obj);
+            return;
+        }
+
+        obj.SetActive(false);
+        pool.objects.Enqueue(obj);
     }
 }
