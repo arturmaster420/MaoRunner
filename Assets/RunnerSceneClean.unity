@@ -1459,7 +1459,7 @@ MonoBehaviour:
   shurikenPrefab: {fileID: 68812117756935382, guid: 9543e715aa7d6c94598f6ab9a76a5204, type: 3}
   throwPoint: {fileID: 1122341484}
   baseThrowSpeed: 40
-  speedMultiplier: 7
+  speedMultiplier: 7.23
   maoRunner: {fileID: 755007949}
 --- !u!114 &755007949
 MonoBehaviour:
@@ -1474,20 +1474,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forwardSpeed: 9
-  maxForwardSpeed: 70.8
-  speedGainPerSecond: 0.3
+  maxForwardSpeed: 69
+  speedGainPerSecond: 0.15
   laneDistance: 3
-  laneSwitchSpeed: 15
+  laneSwitchSpeed: 20
   jumpForce: 9.5
   gravity: -50
-  slideDuration: 0.6
+  slideDuration: 0.5
   slideHeight: 0.3
   jumpLengthInfluence: 1
   slideLengthInfluence: 1
   minAnimSpeed: 1
-  maxAnimSpeed: 10
+  maxAnimSpeed: 20
   baseSpeedKmh: 30
-  maxSpeedKmh: 360
+  maxSpeedKmh: 250.7
 --- !u!143 &755007950
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1533,7 +1533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBar: {fileID: 407206901}
   energyText: {fileID: 1984542235}
-  maxEnergy: 100
+  maxEnergy: 400
   currentEnergy: 1
   ghostDuration: 0.7
   ghostSpeedMultiplier: 3
@@ -1548,6 +1548,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 54418a64d12219f4c99a7da46a710d5b, type: 3}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 54418a64d12219f4c99a7da46a710d5b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54418a64d12219f4c99a7da46a710d5b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1567,15 +1571,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54418a64d12219f4c99a7da46a710d5b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54418a64d12219f4c99a7da46a710d5b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54418a64d12219f4c99a7da46a710d5b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54418a64d12219f4c99a7da46a710d5b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1672,10 +1676,10 @@ MonoBehaviour:
   energy: {fileID: 755007954}
   maxContinues: 100
   energyRestorePct: 50
-  reviveSpeedFactor: 0.99
+  reviveSpeedFactor: 1
   minReviveSpeed: 12
   invulnerabilityTime: 2
-  reviveForwardOffset: 2.5
+  reviveForwardOffset: 3
 --- !u!114 &971520353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3191,10 +3195,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorPrefab: {fileID: 743138032001578000, guid: cb6794248874de641a491de4c71ea0ca, type: 3}
-  numberOfSegments: 10
-  baseSegmentLength: 18
+  numberOfSegments: 12
+  baseSegmentLength: 16
   player: {fileID: 755007952}
-  safeZone: 50
+  safeZone: 36
   laneCount: 3
   laneDistance: 3
   baseSlotsPerSegment: 1
@@ -3211,24 +3215,24 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 3.474998
-      value: 5.813681
-      inSlope: 0.33333334
-      outSlope: 0.33333334
+      time: 7.7290545
+      value: 5.5794253
+      inSlope: 0.26794747
+      outSlope: 0.26794747
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.21698658
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  baseDensity: 0.42
+  baseDensity: 0.795
   densityBySpeed:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 1
-      value: 1
+      time: 1.0399399
+      value: 1.1531982
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -3236,8 +3240,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 4.0083313
-      value: 0.4971649
+      time: 9.032653
+      value: -0.19748855
       inSlope: -0.1
       outSlope: -0.1
       tangentMode: 0
@@ -3247,19 +3251,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minLowGap: 2
-  minHighGap: 2
+  minLowGap: 1
+  minHighGap: 1
   minCrossGap: 1
-  bonusSegments: 10
-  bonusChanceAtHighSpeed: 0
-  bonusSpeedThresholdKph: 100.2
-  pickupsOnlyInBonus: 0
+  bonusSegments: 15
+  bonusChanceAtHighSpeed: 0.007
+  bonusSpeedThresholdKph: 120
+  pickupsOnlyInBonus: 1
   waves:
-  - minSpeedKph: 150
-    densityMultiplier: 5.08
-    bonusChanceMultiplier: -0.72
-    slotScaleMultiplier: -3
-    overrideLowKeys: []
+  - minSpeedKph: 200
+    densityMultiplier: 1
+    bonusChanceMultiplier: 0
+    slotScaleMultiplier: 0
+    overrideLowKeys:
+    - key: low
+      weight: 0
     overrideHighKeys: []
     overrideEnemyKeys: []
     overridePickupKeys:
@@ -3276,31 +3282,31 @@ MonoBehaviour:
       weight: 10
   lowObstacleKeys:
   - key: low
-    weight: 40
+    weight: 50
   highObstacleKeys:
   - key: high
-    weight: 40
+    weight: 50
   enemyKeys:
   - key: enemy
     weight: 0.01
   pickupKeys:
   - key: coin1
-    weight: 10
+    weight: 0.5
   - key: coin10
-    weight: 6
+    weight: 0.2
   - key: coin100
-    weight: 1
+    weight: 0.05
   - key: shuriken
-    weight: 6
+    weight: 0.3
   - key: energy
-    weight: 6
+    weight: 0.5
   bossKeys:
   - key: boss
     weight: 0.01
-  pickupWeightMult: 0.5
-  obstacleWeightMult: 2
-  enemyWeightMult: 0.5
-  bossWeightMult: 0.3
+  pickupWeightMult: 1
+  obstacleWeightMult: 1
+  enemyWeightMult: 0.001
+  bossWeightMult: 0.001
   runner: {fileID: 755007949}
   estimatedJumpTime: 0.3
   pickupHeight: 0.3
@@ -3313,7 +3319,7 @@ Transform:
   m_GameObject: {fileID: 1942378455}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 18}
+  m_LocalScale: {x: 1, y: 1, z: 16}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3486,31 +3492,31 @@ MonoBehaviour:
   pools:
   - key: low
     prefab: {fileID: 2920380569118566074, guid: 11a74a3c72d2a384c83b762a71949166, type: 3}
-    preload: 8
+    preload: 16
   - key: high
     prefab: {fileID: 7400015632713865583, guid: 7997f901dc31b474187d66aa4a67ecb5, type: 3}
-    preload: 8
+    preload: 16
   - key: enemy
     prefab: {fileID: 7015516004217321912, guid: e3322cbc3a0708642bf6aef1dadcb9dd, type: 3}
-    preload: 8
+    preload: 4
   - key: boss
     prefab: {fileID: 1723136665104521108, guid: ed3214a747eed1f4785d7f37569bc7c6, type: 3}
-    preload: 8
+    preload: 4
   - key: coin1
     prefab: {fileID: 53747488414540171, guid: 006789cad1d592e43bab815f18f9acfe, type: 3}
     preload: 8
   - key: coin10
     prefab: {fileID: 103289234326207644, guid: 37f80793d8a46014db808dc6803a4226, type: 3}
-    preload: 8
+    preload: 12
   - key: coin100
     prefab: {fileID: 1192612023561935251, guid: db267e140cb30444993fb04b3f8ad676, type: 3}
-    preload: 8
+    preload: 12
   - key: energy
     prefab: {fileID: 1550569260085099549, guid: ab8edc63d55f65d4d94c72816d931d51, type: 3}
-    preload: 8
+    preload: 12
   - key: shuriken
     prefab: {fileID: 5930711535294282997, guid: f5de3a9d752a48a49846da031673d444, type: 3}
-    preload: 8
+    preload: 12
 --- !u!4 &2074448381
 Transform:
   m_ObjectHideFlags: 0
