@@ -1,115 +1,177 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class TrackSpawnerWithObstacles : MonoBehaviour
+public class TrackSpawnerWithDependenciesV2 : MonoBehaviour
 {
     [Header("Track Settings")]
     public GameObject floorPrefab;
     public int numberOfSegments = 10;
-    public float baseSegmentLength = 10f;
+    public float baseSegmentLength = 12f;
     public Transform player;
     public float safeZone = 50f;
-
-    private float spawnZ = 0f;
-    private Queue<GameObject> activeSegments = new Queue<GameObject>();
 
     [Header("Lane Settings")]
     public int laneCount = 3;
     public float laneDistance = 3f;
 
     [Header("Dynamic Slot Settings")]
-    public int baseSlotsPerSegment = 6;
-    public AnimationCurve slotScaleBySpeed = AnimationCurve.Linear(1f, 1f, 4f, 2f);
+    public int baseSlotsPerSegment = 1;
+    public AnimationCurve slotScaleBySpeed = AnimationCurve.Linear(0, 1, 200, 1);
 
     [Header("Density Settings")]
-    [Range(0f, 1f)] public float baseDensity = 0.6f;
-    public AnimationCurve densityBySpeed = AnimationCurve.Linear(1f, 0.8f, 4f, 0.4f);
+    [Range(0f, 1f)] public float baseDensity = 0.5f;
+    public AnimationCurve densityBySpeed = AnimationCurve.Linear(0, 1, 200, 1);
 
-    [Header("Gap Settings (in jump lengths)")]
-    public float minLowGap = 1.0f;
-    public float minHighGap = 1.0f;
-    public float minCrossGap = 0.7f;
+    [Header("Gap Settings (in slot counts)")]
+    [Min(0)] public int minLowGap = 1;
+    [Min(0)] public int minHighGap = 1;
+    [Min(0)] public int minCrossGap = 1;
 
     [Header("Bonus Corridors")]
-    public int bonusSegments = 10;
-    [Range(0f, 1f)] public float bonusChanceAtHighSpeed = 0.08f;
-    public float bonusSpeedThresholdKph = 140f;
+    public int bonusSegments = 15;
+    [Range(0f, 1f)] public float bonusChanceAtHighSpeed = 0.007f;
+    public float bonusSpeedThresholdKph = 120f;
     public bool pickupsOnlyInBonus = true;
-    private int bonusLeft = 0;
 
-    // ================================
-    // 🔹 WAVES — уровни сложности
-    // ================================
-    [System.Serializable]
-    public class WaveSettings
+    [Serializable]
+    public class Wave
     {
-        [Header("Wave Trigger")]
-        public float minSpeedKph = 0f;
-        public float densityMultiplier = 1f;
-        public float bonusChanceMultiplier = 1f;
-        public float slotScaleMultiplier = 1f;
-
-        [Header("Custom Weights Override")]
-        public List<WeightedKey> overrideLowKeys;
-        public List<WeightedKey> overrideHighKeys;
-        public List<WeightedKey> overrideEnemyKeys;
-        public List<WeightedKey> overridePickupKeys;
-        public List<WeightedKey> overrideBossKeys;
+        public float speedThresholdKph = 80f;
+        [Range(0.1f, 3f)] public float densityMultiplier = 1f;
+        [Range(0.1f, 3f)] public float obstacleMult = 1f;
+        [Range(0.1f, 3f)] public float enemyMult = 1f;
+        [Range(0.1f, 3f)] public float pickupMult = 1f;
+        [Range(0.1f, 3f)] public float bossMult = 1f;
     }
-
     [Header("Waves of Difficulty")]
-    public List<WaveSettings> waves = new List<WaveSettings>();
-    private WaveSettings activeWave;
+    public List<Wave> waves = new();
 
-    // ================================
-    // 🔹 Списки контента
-    // ================================
-    [System.Serializable]
-    public class WeightedKey
+    // ======== Новая структура ========
+    [Serializable]
+    public class SpawnRule
     {
+        [Header("Base")]
         public string key;
-        [Range(0.01f, 50f)] public float weight = 1f;
+        public string category;
+        public float weight = 1f;
+
+        [Header("Dependencies")]
+        public List<string> incompatibleCategories = new();
+        public List<string> requiresCategories = new();
+        public float dependencyRadius = 0f;
+
+        [Header("Conditions")]
+        public float minSpeed = 0f;
+        public float maxSpeed = 9999f;
+        public bool onlyInBonus = false;
+        public bool onlyOutsideBonus = false;
+        public float minDistanceBetweenSame = 0f;
     }
 
     [Header("Content Lists (Pool Keys)")]
-    public List<WeightedKey> lowObstacleKeys = new();
-    public List<WeightedKey> highObstacleKeys = new();
-    public List<WeightedKey> enemyKeys = new();
-    public List<WeightedKey> pickupKeys = new();
-    public List<WeightedKey> bossKeys = new();
+    public List<SpawnRule> lowObstacleRules = new();
+    public List<SpawnRule> highObstacleRules = new();
+    public List<SpawnRule> enemyRules = new();
+    public List<SpawnRule> pickupRules = new();
+    public List<SpawnRule> bossRules = new();
 
-    // 🔹 Глобальные множители весов
     [Header("Global Weight Multipliers (by Category)")]
-    public float pickupWeightMult = 2f;
-    public float obstacleWeightMult = 1f;
-    public float enemyWeightMult = 0.8f;
-    public float bossWeightMult = 0.5f;
+    [Min(0f)] public float pickupWeightMult = 1f;
+    [Min(0f)] public float obstacleWeightMult = 1f;
+    [Min(0f)] public float enemyWeightMult = 1f;
+    [Min(0f)] public float bossWeightMult = 1f;
 
     [Header("Runner Link")]
     public MaoRunnerFixed runner;
-    public float estimatedJumpTime = 0.5f;
+    public float estimatedJumpTime = 0.3f;
     public float pickupHeight = 0.3f;
 
-    private float SpeedKph => runner != null ? runner.forwardSpeed * 3.6f : 30f;
-    private float SpeedRatio => Mathf.Max(0.1f, SpeedKph / 30f);
+    [Header("Debug Mode")]
+    public bool debugSpawnChecks = false;
 
-    // ===============================================================
+    private float spawnZ = 0f;
+    private readonly Queue<GameObject> activeSegments = new();
+    private PoolManager pool => PoolManager.Instance;
 
-    void Update()
+    private struct LaneState { public int lowGap; public int highGap; }
+    private LaneState[] laneState;
+    private int bonusLeft = 0;
+
+    private class SlotMemory
     {
-        while (activeSegments.Count < numberOfSegments)
-            SpawnSegment();
+        public List<string> categories = new();
+    }
+    private List<SlotMemory> slotHistory = new();
 
+    // ======== Глобальные зависимости категорий ========
+    private static readonly Dictionary<string, List<string>> GlobalIncompatibility = new()
+    {
+        {"ObstacleLow", new() {"ObstacleHigh", "Enemy", "Pickup", "Boss"}},
+        {"ObstacleHigh", new() {"ObstacleLow", "Enemy", "Pickup", "Boss"}},
+        {"Enemy", new() {"ObstacleLow", "ObstacleHigh", "Pickup", "Boss"}},
+        {"Pickup", new() {"Enemy", "Boss"}},
+        {"Boss", new() {"Enemy", "ObstacleLow", "ObstacleHigh"}}
+    };
+
+    private void Awake()
+    {
+        laneState = new LaneState[laneCount];
+        for (int i = 0; i < laneCount; i++)
+            laneState[i] = new LaneState { lowGap = 999, highGap = 999 };
+    }
+
+    private void Update()
+    {
+        if (activeSegments.Count < numberOfSegments)
+            SpawnSegment();
         DeleteOldSegment();
+    }
+
+    private float CurrentKph => (runner != null) ? runner.forwardSpeed * 3.6f : 0f;
+    private Wave CurrentWave
+    {
+        get
+        {
+            Wave w = null;
+            foreach (var x in waves) if (CurrentKph >= x.speedThresholdKph) w = x;
+            return w;
+        }
     }
 
     private void SpawnSegment()
     {
-        GameObject segment = Instantiate(floorPrefab, Vector3.forward * spawnZ, Quaternion.identity);
-        activeSegments.Enqueue(segment);
+        GameObject seg = Instantiate(floorPrefab, Vector3.forward * spawnZ, Quaternion.identity);
+        activeSegments.Enqueue(seg);
         spawnZ += baseSegmentLength;
 
-        SpawnContent(segment.transform);
+        int slots = Mathf.Max(1, Mathf.RoundToInt(baseSlotsPerSegment * slotScaleBySpeed.Evaluate(CurrentKph)));
+        float density = baseDensity * densityBySpeed.Evaluate(CurrentKph);
+        var wave = CurrentWave;
+        if (wave != null) density *= wave.densityMultiplier;
+
+        bool bonus = false;
+        if (bonusLeft > 0) { bonus = true; bonusLeft--; }
+        else if (CurrentKph >= bonusSpeedThresholdKph && UnityEngine.Random.value < bonusChanceAtHighSpeed)
+        { bonus = true; bonusLeft = bonusSegments - 1; }
+
+        bool[,] occupied = new bool[laneCount, slots];
+        slotHistory.Clear();
+
+        for (int s = 0; s < slots; s++)
+        {
+            slotHistory.Add(new SlotMemory());
+
+            if (UnityEngine.Random.value > Mathf.Clamp01(density))
+            { AdvanceGaps(); continue; }
+
+            for (int lane = 0; lane < laneCount; lane++)
+            {
+                if (occupied[lane, s]) continue;
+                TrySpawnInLane(seg.transform, lane, s, slots, occupied, bonus, wave);
+            }
+            AdvanceGaps();
+        }
     }
 
     private void DeleteOldSegment()
@@ -119,142 +181,123 @@ public class TrackSpawnerWithObstacles : MonoBehaviour
             Destroy(activeSegments.Dequeue());
     }
 
-    // ===============================================================
-
-    private void SpawnContent(Transform parent)
+    private void AdvanceGaps()
     {
-        activeWave = GetActiveWave(SpeedKph);
-
-        int slots = baseSlotsPerSegment;
-        float stepZ = (baseSegmentLength / slots) *
-                      slotScaleBySpeed.Evaluate(SpeedRatio) *
-                      (activeWave != null ? activeWave.slotScaleMultiplier : 1f);
-
-        float density = baseDensity *
-                        densityBySpeed.Evaluate(SpeedRatio) *
-                        (activeWave != null ? activeWave.densityMultiplier : 1f);
-
-        bool isBonus = false;
-        if (bonusLeft > 0)
+        for (int i = 0; i < laneState.Length; i++)
         {
-            bonusLeft--;
-            isBonus = true;
+            laneState[i].lowGap++;
+            laneState[i].highGap++;
         }
-        else if (SpeedKph >= bonusSpeedThresholdKph &&
-                 Random.value < bonusChanceAtHighSpeed *
-                 (activeWave != null ? activeWave.bonusChanceMultiplier : 1f))
-        {
-            isBonus = true;
-            bonusLeft = bonusSegments - 1;
-        }
-
-        var grid = new SlotType[laneCount, slots];
-        var lastLow = new int[laneCount];
-        var lastHigh = new int[laneCount];
-        for (int i = 0; i < laneCount; i++) { lastLow[i] = -999; lastHigh[i] = -999; }
-
-        float jumpMeters = runner != null ? runner.forwardSpeed * estimatedJumpTime : 10f;
-        int minLowSlots = Mathf.CeilToInt((jumpMeters / stepZ) * minLowGap);
-        int minHighSlots = Mathf.CeilToInt((jumpMeters / stepZ) * minHighGap);
-        int minCrossSlots = Mathf.CeilToInt((jumpMeters / stepZ) * minCrossGap);
-
-        var lowList = (activeWave != null && activeWave.overrideLowKeys.Count > 0) ? activeWave.overrideLowKeys : lowObstacleKeys;
-        var highList = (activeWave != null && activeWave.overrideHighKeys.Count > 0) ? activeWave.overrideHighKeys : highObstacleKeys;
-        var enemyList = (activeWave != null && activeWave.overrideEnemyKeys.Count > 0) ? activeWave.overrideEnemyKeys : enemyKeys;
-        var pickupList = (activeWave != null && activeWave.overridePickupKeys.Count > 0) ? activeWave.overridePickupKeys : pickupKeys;
-        var bossList = (activeWave != null && activeWave.overrideBossKeys.Count > 0) ? activeWave.overrideBossKeys : bossKeys;
-
-        // сначала пикапы, потом препятствия
-        TrySpawnType(parent, pickupList, SlotType.Pickup, density * (isBonus ? 2f : 1f),
-            grid, stepZ, lastLow, lastHigh, minLowSlots, minHighSlots, minCrossSlots, true);
-        if (!isBonus) TrySpawnType(parent, bossList, SlotType.Boss, density * 0.2f,
-            grid, stepZ, lastLow, lastHigh, minLowSlots, minHighSlots, minCrossSlots);
-        if (!isBonus) TrySpawnType(parent, enemyList, SlotType.Enemy, density * 0.5f,
-            grid, stepZ, lastLow, lastHigh, minLowSlots, minHighSlots, minCrossSlots);
-        if (!isBonus) TrySpawnType(parent, lowList, SlotType.Low, density,
-            grid, stepZ, lastLow, lastHigh, minLowSlots, minHighSlots, minCrossSlots);
-        if (!isBonus) TrySpawnType(parent, highList, SlotType.High, density,
-            grid, stepZ, lastLow, lastHigh, minLowSlots, minHighSlots, minCrossSlots);
     }
 
-    private void TrySpawnType(Transform parent, List<WeightedKey> list, SlotType type, float density, SlotType[,] grid,
-                              float stepZ, int[] lastLow, int[] lastHigh,
-                              int minLowSlots, int minHighSlots, int minCrossSlots, bool pickups = false)
+    private void TrySpawnInLane(Transform parent, int lane, int slot, int totalSlots, bool[,] occupied, bool bonus, Wave wave)
     {
-        if (list == null || list.Count == 0) return;
+        var allRules = new List<SpawnRule>();
+        allRules.AddRange(pickupRules);
+        allRules.AddRange(enemyRules);
+        allRules.AddRange(bossRules);
+        allRules.AddRange(lowObstacleRules);
+        allRules.AddRange(highObstacleRules);
 
-        for (int slot = 0; slot < baseSlotsPerSegment; slot++)
+        List<SpawnRule> valid = new();
+
+        foreach (var rule in allRules)
         {
-            for (int lane = 0; lane < laneCount; lane++)
+            if (CanSpawn(rule, lane, slot, bonus)) valid.Add(rule);
+        }
+
+        if (valid.Count == 0) return;
+
+        // Выбор по весам
+        float totalWeight = 0f;
+        foreach (var r in valid) totalWeight += r.weight;
+        float rnd = UnityEngine.Random.value * totalWeight;
+
+        float acc = 0f;
+        SpawnRule chosen = valid[0];
+        foreach (var r in valid)
+        {
+            acc += r.weight;
+            if (rnd <= acc) { chosen = r; break; }
+        }
+
+        if (occupied[lane, slot]) return;
+        occupied[lane, slot] = true;
+
+        Vector3 pos = parent.position + Vector3.right * ((lane - (laneCount - 1) / 2f) * laneDistance);
+        if (chosen.category.ToLower().Contains("pickup")) pos.y += pickupHeight;
+
+        pool.Spawn(chosen.key, pos, Quaternion.identity, parent);
+        slotHistory[slot].categories.Add(chosen.category);
+        RegisterPlaced(lane, chosen.category);
+    }
+
+    private bool CanSpawn(SpawnRule rule, int lane, int slot, bool bonus)
+    {
+        float kph = CurrentKph;
+
+        if (rule.onlyInBonus && !bonus) return false;
+        if (rule.onlyOutsideBonus && bonus) return false;
+        if (kph < rule.minSpeed || kph > rule.maxSpeed) return false;
+        if (string.IsNullOrEmpty(rule.category)) return false;
+
+        // --- Глобальные несовместимости ---
+        if (GlobalIncompatibility.TryGetValue(rule.category, out var globalBlock))
+        {
+            foreach (var cat in globalBlock)
             {
-                if (grid[lane, slot] != SlotType.None) continue;
-                if (Random.value > density) continue;
-
-                if (!pickups && (type == SlotType.Low || type == SlotType.High))
-                {
-                    int lastOwn = (type == SlotType.Low ? lastLow[lane] : lastHigh[lane]);
-                    int lastCross = (type == SlotType.Low ? lastHigh[lane] : lastLow[lane]);
-                    int minOwn = (type == SlotType.Low ? minLowSlots : minHighSlots);
-                    if (slot - lastOwn < minOwn) continue;
-                    if (slot - lastCross < minCrossSlots) continue;
-                }
-
-                WeightedKey wk = PickWeighted(list);
-                if (wk == null) continue;
-
-                Vector3 pos = LaneSlotPos(parent, lane, slot, stepZ);
-                if (type == SlotType.Pickup) pos.y += pickupHeight;
-
-                GameObject obj = PoolManager.Instance.Spawn(wk.key, pos, Quaternion.identity, parent);
-                grid[lane, slot] = type;
-
-                if (type == SlotType.Low) lastLow[lane] = slot;
-                if (type == SlotType.High) lastHigh[lane] = slot;
+                if (slot < slotHistory.Count && slotHistory[slot].categories.Contains(cat))
+                    return false;
             }
         }
-    }
 
-    private WeightedKey PickWeighted(List<WeightedKey> list)
-    {
-        if (list == null || list.Count == 0) return null;
-
-        // выбираем множитель категории
-        float typeMult = 1f;
-        if (list == pickupKeys) typeMult = pickupWeightMult;
-        else if (list == lowObstacleKeys || list == highObstacleKeys) typeMult = obstacleWeightMult;
-        else if (list == enemyKeys) typeMult = enemyWeightMult;
-        else if (list == bossKeys) typeMult = bossWeightMult;
-
-        float total = 0f;
-        foreach (var w in list) total += w.weight * typeMult;
-
-        float r = Random.value * total;
-        foreach (var w in list)
+        // --- Локальные несовместимости ---
+        if (rule.incompatibleCategories != null && rule.incompatibleCategories.Count > 0)
         {
-            r -= w.weight * typeMult;
-            if (r <= 0f) return w;
+            if (slot < slotHistory.Count)
+            {
+                foreach (var existing in slotHistory[slot].categories)
+                {
+                    if (rule.incompatibleCategories.Contains(existing))
+                        return false;
+                }
+            }
         }
 
-        return list[list.Count - 1];
-    }
-
-    private Vector3 LaneSlotPos(Transform parent, int lane, int slot, float stepZ)
-    {
-        float laneX = (lane - (laneCount - 1) / 2f) * laneDistance;
-        float z = parent.position.z + (slot + 0.5f) * stepZ;
-        return new Vector3(laneX, parent.position.y, z);
-    }
-
-    private WaveSettings GetActiveWave(float kph)
-    {
-        WaveSettings selected = null;
-        foreach (var w in waves)
+        // --- Проверка requires ---
+        if (rule.requiresCategories != null && rule.requiresCategories.Count > 0)
         {
-            if (kph >= w.minSpeedKph)
-                selected = w;
+            bool found = false;
+            int radius = Mathf.RoundToInt(rule.dependencyRadius);
+
+            for (int i = -radius; i <= radius; i++)
+            {
+                int idx = slot + i;
+                if (idx < 0 || idx >= slotHistory.Count) continue;
+
+                foreach (var cat in slotHistory[idx].categories)
+                {
+                    if (rule.requiresCategories.Contains(cat))
+                        found = true;
+                }
+            }
+            if (!found) return false;
         }
-        return selected;
+
+        return true;
     }
 
-    private enum SlotType { None, Low, High, Enemy, Boss, Pickup }
+    private void RegisterPlaced(int lane, string category)
+    {
+        if (category.ToLower().Contains("low"))
+        {
+            laneState[lane].lowGap = 0;
+            laneState[lane].highGap = Mathf.Min(laneState[lane].highGap, minCrossGap);
+        }
+        else if (category.ToLower().Contains("high"))
+        {
+            laneState[lane].highGap = 0;
+            laneState[lane].lowGap = Mathf.Min(laneState[lane].lowGap, minCrossGap);
+        }
+    }
 }

@@ -3215,8 +3215,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 7.7290545
-      value: 5.5794253
+      time: 9.045735
+      value: 6.64249
       inSlope: 0.26794747
       outSlope: 0.26794747
       tangentMode: 0
@@ -3226,90 +3226,191 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  baseDensity: 0.795
+  baseDensity: 0.201
   densityBySpeed:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 1.0399399
-      value: 1.1531982
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      time: 0.05493164
+      value: 1.0162354
+      inSlope: -0.2186223
+      outSlope: -0.2186223
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 9.032653
-      value: -0.19748855
-      inSlope: -0.1
-      outSlope: -0.1
-      tangentMode: 0
+      time: 2.257843
+      value: 0.5346298
+      inSlope: -0.2186223
+      outSlope: -0.2186223
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minLowGap: 1
-  minHighGap: 1
+  minLowGap: 2
+  minHighGap: 2
   minCrossGap: 1
   bonusSegments: 15
   bonusChanceAtHighSpeed: 0.007
   bonusSpeedThresholdKph: 120
   pickupsOnlyInBonus: 1
-  waves:
-  - minSpeedKph: 200
-    densityMultiplier: 1
-    bonusChanceMultiplier: 0
-    slotScaleMultiplier: 0
-    overrideLowKeys:
-    - key: low
-      weight: 0
-    overrideHighKeys: []
-    overrideEnemyKeys: []
-    overridePickupKeys:
-    - key: coin100
-      weight: 10
-    - key: energy
-      weight: 10
-    - key: coin10
-      weight: 15
-    - key: shuriken
-      weight: 15
-    overrideBossKeys:
-    - key: boss
-      weight: 10
-  lowObstacleKeys:
+  waves: []
+  lowObstacleRules:
   - key: low
-    weight: 50
-  highObstacleKeys:
+    category: ObstacleLow
+    weight: 40
+    incompatibleCategories:
+    - ObstacleHigh
+    - energy
+    - shuriken
+    - coin
+    - Enemy
+    - Boss
+    requiresCategories: []
+    dependencyRadius: 3
+    minSpeed: 0
+    maxSpeed: 999
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 2
+  highObstacleRules:
   - key: high
-    weight: 50
-  enemyKeys:
+    category: ObstacleHigh
+    weight: 40
+    incompatibleCategories:
+    - ObstacleLow
+    - Enemy
+    - Boss
+    requiresCategories: []
+    dependencyRadius: 3
+    minSpeed: 0
+    maxSpeed: 999
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 2
+  enemyRules:
   - key: enemy
-    weight: 0.01
-  pickupKeys:
+    category: Enemy
+    weight: 5
+    incompatibleCategories:
+    - ObstacleLow
+    - ObstacleHigh
+    requiresCategories: []
+    dependencyRadius: 0
+    minSpeed: 100
+    maxSpeed: 999
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 20
+  pickupRules:
   - key: coin1
-    weight: 0.5
+    category: coin
+    weight: 30
+    incompatibleCategories:
+    - Enemy
+    - ObstacleLow
+    - Boss
+    - energy
+    - shuriken
+    requiresCategories: []
+    dependencyRadius: 3
+    minSpeed: 0
+    maxSpeed: 999
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 1
   - key: coin10
-    weight: 0.2
+    category: coin
+    weight: 20
+    incompatibleCategories:
+    - ObstacleLow
+    - Enemy
+    - Boss
+    - energy
+    - shuriken
+    requiresCategories: []
+    dependencyRadius: 3
+    minSpeed: 0
+    maxSpeed: 0
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 0
   - key: coin100
-    weight: 0.05
-  - key: shuriken
-    weight: 0.3
+    category: coin
+    weight: 1
+    incompatibleCategories:
+    - ObstacleLow
+    - Enemy
+    - Boss
+    - energy
+    - shuriken
+    requiresCategories: []
+    dependencyRadius: 3
+    minSpeed: 0
+    maxSpeed: 0
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 0
   - key: energy
-    weight: 0.5
-  bossKeys:
+    category: energy
+    weight: 20
+    incompatibleCategories:
+    - ObstacleLow
+    - Enemy
+    - Boss
+    - shuriken
+    - coin
+    requiresCategories: []
+    dependencyRadius: 3
+    minSpeed: 0
+    maxSpeed: 999
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 1
+  - key: shuriken
+    category: shuriken
+    weight: 15
+    incompatibleCategories:
+    - ObstacleLow
+    - Enemy
+    - Boss
+    - energy
+    - coin
+    requiresCategories: []
+    dependencyRadius: 3
+    minSpeed: 0
+    maxSpeed: 999
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 1
+  bossRules:
   - key: boss
-    weight: 0.01
-  pickupWeightMult: 1
+    category: Boss
+    weight: 1
+    incompatibleCategories:
+    - ObstacleLow
+    - ObstacleHigh
+    - Enemy
+    - Pickup
+    requiresCategories: []
+    dependencyRadius: 10
+    minSpeed: 150
+    maxSpeed: 0
+    onlyInBonus: 0
+    onlyOutsideBonus: 0
+    minDistanceBetweenSame: 100
+  pickupWeightMult: 0.5
   obstacleWeightMult: 1
-  enemyWeightMult: 0.001
-  bossWeightMult: 0.001
+  enemyWeightMult: 1
+  bossWeightMult: 1
   runner: {fileID: 755007949}
   estimatedJumpTime: 0.3
   pickupHeight: 0.3
+  debugSpawnChecks: 0
 --- !u!4 &1942378457
 Transform:
   m_ObjectHideFlags: 0
