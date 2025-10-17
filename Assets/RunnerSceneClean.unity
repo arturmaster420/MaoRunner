@@ -1456,7 +1456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f095e6184e6cd44185378c32098b513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shurikenPrefab: {fileID: 68812117756935382, guid: 9543e715aa7d6c94598f6ab9a76a5204, type: 3}
+  shurikenPrefab: {fileID: 3605812841937933568, guid: 43ef1d18bcd61324f8e82eef03cbcdca, type: 3}
   throwPoint: {fileID: 1122341484}
   baseThrowSpeed: 50
   speedMultiplier: 7.23
@@ -1533,10 +1533,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBar: {fileID: 407206901}
   energyText: {fileID: 1984542235}
-  maxEnergy: 400
+  maxEnergy: 600
   currentEnergy: 1
-  ghostDuration: 0.7
-  ghostSpeedMultiplier: 3
+  ghostDuration: 2
+  ghostSpeedMultiplier: 2
 --- !u!1001 &817966462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1676,7 +1676,7 @@ MonoBehaviour:
   energy: {fileID: 755007954}
   maxContinues: 100
   energyRestorePct: 100
-  reviveSpeedFactor: 1
+  reviveSpeedFactor: 1.1
   minReviveSpeed: 12
   invulnerabilityTime: 2
   reviveForwardOffset: 3
@@ -1725,7 +1725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shurikenText: {fileID: 1362929332}
-  maxShurikens: 20
+  maxShurikens: 100
 --- !u!1 &980861716
 GameObject:
   m_ObjectHideFlags: 0
@@ -3195,10 +3195,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorPrefab: {fileID: 743138032001578000, guid: cb6794248874de641a491de4c71ea0ca, type: 3}
-  numberOfSegments: 6
+  numberOfSegments: 4
   baseSegmentLength: 72
   player: {fileID: 755007952}
-  safeZone: 72
+  safeZone: 4
   laneCount: 3
   laneDistance: 3
   baseSlotsPerSegment: 12
@@ -3215,17 +3215,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.0014579658
     - serializedVersion: 3
-      time: 4.6536264
-      value: 2.7095537
-      inSlope: 0.043560207
-      outSlope: 0.043560207
+      time: 4.811372
+      value: 6.0041676
+      inSlope: 0.039415073
+      outSlope: 0.039415073
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.030453742
+      outWeight: 0.03007335
     - serializedVersion: 3
-      time: 244.81747
-      value: -6.2685633
+      time: 240.28915
+      value: -5.155862
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -3235,7 +3235,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  baseDensity: 0.5
+  baseDensity: 0.69
   densityBySpeed:
     serializedVersion: 2
     m_Curve:
@@ -3260,23 +3260,49 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minHighGap: 0
-  minCrossGap: 2
-  bonusSegments: 6
+  minHighGap: 3
+  minCrossGap: 3
+  bonusSegments: 3
   bonusChanceAtHighSpeed: 0.1
   bonusSpeedThresholdKph: 200
   pickupsOnlyInBonus: 1
+  slotScaleInBonus: 3
   waves:
   - startAtDistance: 3000
-    pickupWeightMult: 2.79
+    endAtDistance: 3500
+    allowedKeys:
+    - shuriken
+    - energy
+    slotScaleByWave: 3
+    pickupWeightMult: 2.16
     obstacleWeightMult: 1.72
     enemyWeightMult: 1.85
     bossWeightMult: 2
-  lowObstacleRules:
+  - startAtDistance: 6000
+    endAtDistance: 7000
+    allowedKeys:
+    - shuriken
+    - energy
+    slotScaleByWave: 3
+    pickupWeightMult: 2.16
+    obstacleWeightMult: 1.72
+    enemyWeightMult: 1.85
+    bossWeightMult: 2
+  - startAtDistance: 1200
+    endAtDistance: 1300
+    allowedKeys:
+    - shuriken
+    - energy
+    slotScaleByWave: 3
+    pickupWeightMult: 2.16
+    obstacleWeightMult: 1.72
+    enemyWeightMult: 1.85
+    bossWeightMult: 2
+  obstacleRules:
     items:
     - key: low
       category: 0
-      weight: 60
+      weight: 50
       allowedLanes: 00000000
       incompatibleCategories: 01000000020000000300000004000000
       requiresCategories: 
@@ -3288,7 +3314,7 @@ MonoBehaviour:
       minDistanceBetweenSame: 1
     - key: low
       category: 0
-      weight: 60
+      weight: 50
       allowedLanes: 01000000
       incompatibleCategories: 01000000020000000300000004000000
       requiresCategories: 
@@ -3300,7 +3326,7 @@ MonoBehaviour:
       minDistanceBetweenSame: 1
     - key: low
       category: 0
-      weight: 60
+      weight: 50
       allowedLanes: 02000000
       incompatibleCategories: 01000000020000000300000004000000
       requiresCategories: 
@@ -3312,7 +3338,19 @@ MonoBehaviour:
       minDistanceBetweenSame: 1
     - key: high
       category: 1
-      weight: 60
+      weight: 50
+      allowedLanes: 00000000
+      incompatibleCategories: 000000000200000004000000
+      requiresCategories: 
+      dependencyRadius: 0
+      minSpeed: 0
+      maxSpeed: 999
+      onlyInBonus: 0
+      onlyOutsideBonus: 1
+      minDistanceBetweenSame: 1
+    - key: high
+      category: 1
+      weight: 50
       allowedLanes: 01000000
       incompatibleCategories: 000000000200000004000000
       requiresCategories: 
@@ -3324,7 +3362,7 @@ MonoBehaviour:
       minDistanceBetweenSame: 1
     - key: high
       category: 1
-      weight: 60
+      weight: 50
       allowedLanes: 02000000
       incompatibleCategories: 000000000200000004000000
       requiresCategories: 
@@ -3334,20 +3372,6 @@ MonoBehaviour:
       onlyInBonus: 0
       onlyOutsideBonus: 1
       minDistanceBetweenSame: 1
-    - key: high
-      category: 1
-      weight: 60
-      allowedLanes: 00000000
-      incompatibleCategories: 000000000200000004000000
-      requiresCategories: 
-      dependencyRadius: 0
-      minSpeed: 0
-      maxSpeed: 999
-      onlyInBonus: 0
-      onlyOutsideBonus: 1
-      minDistanceBetweenSame: 1
-  highObstacleRules:
-    items: []
   enemyRules:
     items:
     - key: enemy
@@ -3357,7 +3381,7 @@ MonoBehaviour:
       incompatibleCategories: 00000000010000000300000004000000
       requiresCategories: 
       dependencyRadius: 0
-      minSpeed: 180
+      minSpeed: 100
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
@@ -3369,7 +3393,7 @@ MonoBehaviour:
       incompatibleCategories: 00000000010000000300000004000000
       requiresCategories: 
       dependencyRadius: 0
-      minSpeed: 180
+      minSpeed: 100
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
@@ -3381,7 +3405,7 @@ MonoBehaviour:
       incompatibleCategories: 00000000010000000300000004000000
       requiresCategories: 
       dependencyRadius: 0
-      minSpeed: 180
+      minSpeed: 100
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
@@ -3390,7 +3414,7 @@ MonoBehaviour:
     items:
     - key: energy
       category: 3
-      weight: 7
+      weight: 6
       allowedLanes: 
       incompatibleCategories: 000000000200000004000000
       requiresCategories: 
@@ -3399,10 +3423,10 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 0
-      minDistanceBetweenSame: 0
+      minDistanceBetweenSame: 1
     - key: shuriken
       category: 3
-      weight: 7
+      weight: 6
       allowedLanes: 
       incompatibleCategories: 000000000200000004000000
       requiresCategories: 
@@ -3411,7 +3435,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 0
-      minDistanceBetweenSame: 0
+      minDistanceBetweenSame: 2
     - key: coin1
       category: 3
       weight: 30
@@ -3486,8 +3510,8 @@ MonoBehaviour:
       onlyInBonus: 0
       onlyOutsideBonus: 1
       minDistanceBetweenSame: 100
-  pickupWeightMult: 0.13
-  obstacleWeightMult: 5
+  pickupWeightMult: 1
+  obstacleWeightMult: 3
   enemyWeightMult: 1
   bossWeightMult: 1
   runner: {fileID: 755007949}

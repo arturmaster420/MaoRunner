@@ -7,7 +7,7 @@ public class ShurikenManager : MonoBehaviour
     public TextMeshProUGUI shurikenText;
 
     public int maxShurikens = 10;
-    private int currentShurikens = 2;
+    private int currentShurikens = 10;
 
     private void Awake()
     {
