@@ -635,7 +635,8 @@ PlayerSettings:
   webGLMemoryGeometricGrowthStep: 0.2
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Standalone: INTENSENATION_PROGRESSION
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
