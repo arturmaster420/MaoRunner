@@ -15,30 +15,30 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_FogMode: 3
+  m_FogColor: {r: 1, g: 1, b: 1, a: 1}
+  m_FogMode: 1
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
-  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1.41
-  m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_AmbientSkyColor: {r: 0.5, g: 0.46555057, b: 0.43632075, a: 1}
+  m_AmbientEquatorColor: {r: 1, g: 0.9503594, b: 0.9198113, a: 1}
+  m_AmbientGroundColor: {r: 0.7137255, g: 0.20960082, b: 0.15686274, a: 1}
+  m_AmbientIntensity: 1.32
+  m_AmbientMode: 1
+  m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 1}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 9ddad6ee758296442b9925bacd73ace4, type: 2}
   m_HaloStrength: 0.702
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
-  m_DefaultReflectionResolution: 16
-  m_ReflectionBounces: 1
-  m_ReflectionIntensity: 0.203
+  m_DefaultReflectionResolution: 256
+  m_ReflectionBounces: 2
+  m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 223902077}
-  m_IndirectSpecularColor: {r: 0.20310438, g: 0.22874835, b: 0.26909396, a: 0.203}
+  m_IndirectSpecularColor: {r: 0.511058, g: 0.5066051, b: 0.5039605, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: d40ed0ed6881a5d4d94553398a16386e, type: 2}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 755cf68e497a8be4a8b450b5078ecbaa, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -515,7 +515,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.9811321, g: 0.61654747, b: 0, a: 1}
+  m_Color: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -555,7 +555,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -681,9 +681,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 247110629}
-  - component: {fileID: 247110628}
   - component: {fileID: 247110627}
   - component: {fileID: 247110630}
+  - component: {fileID: 247110633}
+  - component: {fileID: 247110632}
   - component: {fileID: 247110631}
   m_Layer: 0
   m_Name: MainCamera
@@ -700,57 +701,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247110626}
   m_Enabled: 1
---- !u!20 &247110628
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 247110626}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_Iso: 200
-  m_ShutterSpeed: 0.005
-  m_Aperture: 16
-  m_FocusDistance: 10
-  m_FocalLength: 50
-  m_BladeCount: 5
-  m_Curvature: {x: 2, y: 11}
-  m_BarrelClipping: 0.25
-  m_Anamorphism: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
 --- !u!4 &247110629
 Transform:
   m_ObjectHideFlags: 0
@@ -790,10 +740,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 247110626}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7557553b3b6b9024ba852592b77dae43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 755007952}
+  offset: {x: 0, y: 1.2, z: -1}
+  followLerp: 10
+--- !u!114 &247110632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247110626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -824,6 +789,57 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!20 &247110633
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247110626}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 20.78461
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60.000004
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &293600142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,6 +1339,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &503073273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 503073274}
+  - component: {fileID: 503073275}
+  m_Layer: 0
+  m_Name: GlobalPostFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &503073274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503073273}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.48412985, y: 1.3315032, z: 0.61857486}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &503073275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503073273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 8f2ade2a6c36172468d5cf7f7651c288, type: 2}
 --- !u!1 &604888360
 GameObject:
   m_ObjectHideFlags: 0
@@ -1474,7 +1539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forwardSpeed: 12
-  maxForwardSpeed: 75
+  maxForwardSpeed: 96
   speedGainPerSecond: 0.1
   laneDistance: 3
   laneSwitchSpeed: 15
@@ -1482,12 +1547,12 @@ MonoBehaviour:
   gravity: -50
   slideDuration: 0.4
   slideHeight: 0.3
-  jumpLengthInfluence: 0.4
+  jumpLengthInfluence: 0.2
   slideLengthInfluence: 0.8
   minAnimSpeed: 0.8
-  maxAnimSpeed: 20
+  maxAnimSpeed: 40
   baseSpeedKmh: 30
-  maxSpeedKmh: 280
+  maxSpeedKmh: 420
 --- !u!143 &755007950
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1533,10 +1598,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBar: {fileID: 407206901}
   energyText: {fileID: 1984542235}
-  maxEnergy: 600
+  maxEnergy: 200
   currentEnergy: 1
   ghostDuration: 2
-  ghostSpeedMultiplier: 2
+  ghostSpeedMultiplier: 3
 --- !u!1001 &817966462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1676,9 +1741,9 @@ MonoBehaviour:
   energy: {fileID: 755007954}
   maxContinues: 100
   energyRestorePct: 100
-  reviveSpeedFactor: 1.1
+  reviveSpeedFactor: 1.2
   minReviveSpeed: 12
-  invulnerabilityTime: 2
+  invulnerabilityTime: 10
   reviveForwardOffset: 3
 --- !u!114 &971520353
 MonoBehaviour:
@@ -3215,8 +3280,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.0014579658
     - serializedVersion: 3
-      time: 4.811372
-      value: 6.0041676
+      time: 30.084778
+      value: 12.326555
       inSlope: 0.039415073
       outSlope: 0.039415073
       tangentMode: 0
@@ -3224,8 +3289,17 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.03007335
     - serializedVersion: 3
-      time: 240.28915
-      value: -5.155862
+      time: 109.19581
+      value: 9.429695
+      inSlope: -0.07351574
+      outSlope: -0.07351574
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 413.9386
+      value: -30.06427
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -3235,24 +3309,24 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  baseDensity: 0.69
+  baseDensity: 0.8
   densityBySpeed:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 1.367981
       value: 0.186203
-      inSlope: -0.0022240463
-      outSlope: -0.0022240463
+      inSlope: -0.02263265
+      outSlope: -0.02263265
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 283.35138
-      value: -0.4409411
-      inSlope: -0.0022240463
-      outSlope: -0.0022240463
+      time: 420.79904
+      value: -9.306633
+      inSlope: -0.02263265
+      outSlope: -0.02263265
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -3260,34 +3334,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minHighGap: 3
-  minCrossGap: 3
+  minHighGap: 0
+  minCrossGap: 0
   bonusSegments: 3
   bonusChanceAtHighSpeed: 0.1
   bonusSpeedThresholdKph: 200
   pickupsOnlyInBonus: 1
-  slotScaleInBonus: 3
+  slotScaleInBonus: 2
   waves:
-  - startAtDistance: 3000
-    endAtDistance: 3500
-    allowedKeys:
-    - shuriken
-    - energy
-    slotScaleByWave: 3
-    pickupWeightMult: 2.16
-    obstacleWeightMult: 1.72
-    enemyWeightMult: 1.85
-    bossWeightMult: 2
-  - startAtDistance: 6000
-    endAtDistance: 7000
-    allowedKeys:
-    - shuriken
-    - energy
-    slotScaleByWave: 3
-    pickupWeightMult: 2.16
-    obstacleWeightMult: 1.72
-    enemyWeightMult: 1.85
-    bossWeightMult: 2
   - startAtDistance: 1200
     endAtDistance: 1300
     allowedKeys:
@@ -3298,6 +3352,68 @@ MonoBehaviour:
     obstacleWeightMult: 1.72
     enemyWeightMult: 1.85
     bossWeightMult: 2
+  - startAtDistance: 3000
+    endAtDistance: 3200
+    allowedKeys:
+    - shuriken
+    - energy
+    slotScaleByWave: 3
+    pickupWeightMult: 2.16
+    obstacleWeightMult: 1.72
+    enemyWeightMult: 1.85
+    bossWeightMult: 2
+  - startAtDistance: 6000
+    endAtDistance: 6500
+    allowedKeys:
+    - shuriken
+    - energy
+    slotScaleByWave: 3
+    pickupWeightMult: 2.16
+    obstacleWeightMult: 1.72
+    enemyWeightMult: 1.85
+    bossWeightMult: 2
+  - startAtDistance: 7000
+    endAtDistance: 9000
+    allowedKeys:
+    - shuriken
+    - energy
+    - low
+    - high
+    - enemy
+    - boss
+    slotScaleByWave: 0.7
+    pickupWeightMult: 1.79
+    obstacleWeightMult: 0.87
+    enemyWeightMult: 0.85
+    bossWeightMult: 0.95
+  - startAtDistance: 9000
+    endAtDistance: 12000
+    allowedKeys:
+    - shuriken
+    - energy
+    - low
+    - high
+    - enemy
+    - boss
+    slotScaleByWave: 0.6
+    pickupWeightMult: 1.79
+    obstacleWeightMult: 0.87
+    enemyWeightMult: 0.85
+    bossWeightMult: 0.95
+  - startAtDistance: 12000
+    endAtDistance: 30000
+    allowedKeys:
+    - shuriken
+    - energy
+    - low
+    - high
+    - enemy
+    - boss
+    slotScaleByWave: 0.5
+    pickupWeightMult: 1.45
+    obstacleWeightMult: 0.63
+    enemyWeightMult: 0.48
+    bossWeightMult: 0.73
   obstacleRules:
     items:
     - key: low
@@ -3311,7 +3427,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 1
+      minDistanceBetweenSame: 3
     - key: low
       category: 0
       weight: 50
@@ -3323,7 +3439,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 1
+      minDistanceBetweenSame: 3
     - key: low
       category: 0
       weight: 50
@@ -3335,7 +3451,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 1
+      minDistanceBetweenSame: 3
     - key: high
       category: 1
       weight: 50
@@ -3347,7 +3463,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 1
+      minDistanceBetweenSame: 3
     - key: high
       category: 1
       weight: 50
@@ -3359,7 +3475,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 1
+      minDistanceBetweenSame: 3
     - key: high
       category: 1
       weight: 50
@@ -3371,7 +3487,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 1
+      minDistanceBetweenSame: 3
   enemyRules:
     items:
     - key: enemy
@@ -3385,7 +3501,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 72
+      minDistanceBetweenSame: 10
     - key: enemy
       category: 2
       weight: 3
@@ -3397,7 +3513,7 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 72
+      minDistanceBetweenSame: 10
     - key: enemy
       category: 2
       weight: 3
@@ -3409,12 +3525,12 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 1
-      minDistanceBetweenSame: 72
+      minDistanceBetweenSame: 10
   pickupRules:
     items:
     - key: energy
       category: 3
-      weight: 6
+      weight: 7
       allowedLanes: 
       incompatibleCategories: 000000000200000004000000
       requiresCategories: 
@@ -3423,10 +3539,10 @@ MonoBehaviour:
       maxSpeed: 999
       onlyInBonus: 0
       onlyOutsideBonus: 0
-      minDistanceBetweenSame: 1
+      minDistanceBetweenSame: 2
     - key: shuriken
       category: 3
-      weight: 6
+      weight: 7
       allowedLanes: 
       incompatibleCategories: 000000000200000004000000
       requiresCategories: 
@@ -3477,48 +3593,24 @@ MonoBehaviour:
     - key: boss
       category: 4
       weight: 2
-      allowedLanes: 00000000
-      incompatibleCategories: 
-      requiresCategories: 
-      dependencyRadius: 0
-      minSpeed: 150
-      maxSpeed: 999
-      onlyInBonus: 0
-      onlyOutsideBonus: 1
-      minDistanceBetweenSame: 100
-    - key: boss
-      category: 4
-      weight: 2
       allowedLanes: 01000000
-      incompatibleCategories: 
+      incompatibleCategories: 00000000010000000200000003000000
       requiresCategories: 
       dependencyRadius: 0
-      minSpeed: 220
+      minSpeed: 250
       maxSpeed: 999
       onlyInBonus: 0
-      onlyOutsideBonus: 1
-      minDistanceBetweenSame: 100
-    - key: boss
-      category: 4
-      weight: 2
-      allowedLanes: 02000000
-      incompatibleCategories: 
-      requiresCategories: 
-      dependencyRadius: 0
-      minSpeed: 240
-      maxSpeed: 999
-      onlyInBonus: 0
-      onlyOutsideBonus: 1
-      minDistanceBetweenSame: 100
+      onlyOutsideBonus: 0
+      minDistanceBetweenSame: 300
   pickupWeightMult: 1
   obstacleWeightMult: 3
   enemyWeightMult: 1
   bossWeightMult: 1
   runner: {fileID: 755007949}
-  estimatedJumpTime: 0.3
-  pickupHeight: 0.3
-  debugSpawnChecks: 1
-  showSlotGizmos: 1
+  estimatedJumpTime: 0.2
+  pickupHeight: 0.4
+  debugSpawnChecks: 0
+  showSlotGizmos: 0
 --- !u!4 &1942378457
 Transform:
   m_ObjectHideFlags: 0
@@ -3701,40 +3793,40 @@ MonoBehaviour:
   pools:
   - key: low
     prefab: {fileID: 2920380569118566074, guid: 11a74a3c72d2a384c83b762a71949166, type: 3}
-    preload: 24
+    preload: 60
     category: ObstacleLow
   - key: high
     prefab: {fileID: 7400015632713865583, guid: 7997f901dc31b474187d66aa4a67ecb5, type: 3}
-    preload: 24
+    preload: 60
     category: ObstacleHigh
   - key: enemy
     prefab: {fileID: 7015516004217321912, guid: e3322cbc3a0708642bf6aef1dadcb9dd, type: 3}
-    preload: 12
+    preload: 50
     category: Enemy
   - key: boss
     prefab: {fileID: 1723136665104521108, guid: ed3214a747eed1f4785d7f37569bc7c6, type: 3}
-    preload: 12
+    preload: 50
     category: Boss
   - key: coin1
     prefab: {fileID: 53747488414540171, guid: 006789cad1d592e43bab815f18f9acfe, type: 3}
-    preload: 36
+    preload: 72
     category: PickupCoin
   - key: coin10
     prefab: {fileID: 103289234326207644, guid: 37f80793d8a46014db808dc6803a4226, type: 3}
-    preload: 24
+    preload: 60
     category: PickupCoin
   - key: coin100
     prefab: {fileID: 1192612023561935251, guid: db267e140cb30444993fb04b3f8ad676, type: 3}
-    preload: 12
+    preload: 20
     category: PickupCoin
   - key: energy
     prefab: {fileID: 1550569260085099549, guid: ab8edc63d55f65d4d94c72816d931d51, type: 3}
-    preload: 36
+    preload: 60
     category: PickupEnergy
   - key: shuriken
     prefab: {fileID: 5930711535294282997, guid: f5de3a9d752a48a49846da031673d444, type: 3}
-    preload: 36
-    category: PickupWeapon
+    preload: 60
+    category: PickupShuriken
 --- !u!4 &2074448381
 Transform:
   m_ObjectHideFlags: 0

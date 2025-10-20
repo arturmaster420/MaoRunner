@@ -215,8 +215,6 @@ public class TrackSpawnerWithDependencies : MonoBehaviour
                 occupied[lane, slot] = true;
                 reservations[lane, slot].Add(rule.category);
 
-                if (debugSpawnChecks)
-                    Debug.Log($"[✓] {rule.key} lane={lane} slot={slot} z={pos.z:F1}");
             }
         }
     }
