@@ -180,5 +180,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   kind: 1
   amountOverride: 1
-  destroyOnPickup: 1
+  destroyOnPickup: 0
   playerTag: Player

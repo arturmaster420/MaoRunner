@@ -4,6 +4,7 @@ using System.Collections;
 #if TMP_PRESENT
 using TMPro;
 #endif
+using MaoRunner;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -61,11 +62,11 @@ public class ProgressUI : MonoBehaviour
     {
         if (PlayerProgress.Instance == null) return;
         PlayerProgress.Instance.OnLevelChanged += OnLevelChanged;
-        PlayerProgress.Instance.OnXPChanged += OnXPChanged;
+        PlayerProgress.Instance.OnXpChanged += OnXPChanged;
         PlayerProgress.Instance.OnCoinsChanged += OnCoinsChanged;
 
         OnLevelChanged(PlayerProgress.Instance.CurrentLevel);
-        OnXPChanged(PlayerProgress.Instance.CurrentXP, PlayerProgress.Instance.XPForNextLevel);
+        OnXPChanged(PlayerProgress.Instance.CurrentXP, PlayerProgress.Instance.XpForNextLevel);
         OnCoinsChanged(PlayerProgress.Instance.TotalCoins);
     }
 
@@ -73,7 +74,7 @@ public class ProgressUI : MonoBehaviour
     {
         if (PlayerProgress.Instance == null) return;
         PlayerProgress.Instance.OnLevelChanged -= OnLevelChanged;
-        PlayerProgress.Instance.OnXPChanged -= OnXPChanged;
+        PlayerProgress.Instance.OnXpChanged -= OnXPChanged;
         PlayerProgress.Instance.OnCoinsChanged -= OnCoinsChanged;
     }
 

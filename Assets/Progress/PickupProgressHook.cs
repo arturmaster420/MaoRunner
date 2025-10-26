@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using MaoRunner;
 
 public class PickupProgressHook : MonoBehaviour
 {
